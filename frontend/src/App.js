@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import abi from "./abi/SupplyChain.json";
 import "./App.css";
+import FabricDashboard from "./FabricDashboard";
 
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 
@@ -13,6 +14,7 @@ const DISTRIBUTOR = process.env.REACT_APP_DISTRIBUTOR;
 const RETAILER = process.env.REACT_APP_RETAILER;
 
 function App() {
+  const [showFabric, setShowFabric] = useState(true);
   const [contract, setContract] = useState(null);
 
   const [wallet, setWallet] = useState("");
@@ -321,6 +323,8 @@ function App() {
       ] || `Chain ${window.ethereum?.chainId || "connected"}`)
     : "Not connected";
 
+  if (showFabric) return <FabricDashboard onBack={() => setShowFabric(false)} />;
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -350,6 +354,7 @@ function App() {
           <div className="topbar-actions">
             {wallet && <div className="wallet-chip"><span className="wallet-dot" /><div><small>Connected wallet</small><strong>{shorten(wallet)}</strong></div></div>}
             {role && <div className="role-chip">{role}</div>}
+            <button className="button button-dark" onClick={() => setShowFabric(true)}>Switch to Hyperledger Fabric</button>
             <button className="button button-primary" onClick={connectWallet}>{wallet ? "Reconnect wallet" : "Connect MetaMask"}</button>
           </div>
         </header>
